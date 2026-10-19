@@ -1,0 +1,782 @@
+/* ==========================================================================
+   万达云 (wandayun.pics) - 超音速气动流线风 (Aerospace Aerodynamic Streamline)
+   极限性能纯原生样式：0外部依赖，系统字体栈，高优先级加载优化
+   ========================================================================== */
+
+:root {
+  --aero-bg: #090d16;
+  --aero-surface: #111827;
+  --aero-surface-card: #162032;
+  --aero-border: #1e293b;
+  --aero-border-highlight: #334155;
+  --aero-thrust: #f97316;
+  --aero-thrust-glow: rgba(249, 115, 22, 0.25);
+  --aero-thrust-deep: #ea580c;
+  --aero-cobalt: #2563eb;
+  --aero-cobalt-glow: rgba(37, 99, 235, 0.25);
+  --aero-titanium: #f8fafc;
+  --aero-text-muted: #94a3b8;
+  --aero-text-dim: #64748b;
+  --aero-font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --aero-font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* 核心超链接规范：鲜明专属强调色，杜绝浏览器默认蓝/紫，访问前后保持一致 */
+a:link, a:visited {
+  color: var(--aero-thrust);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+a:hover, a:focus {
+  color: #fb923c;
+  text-decoration-thickness: 2px;
+}
+
+/* 无下划线组件级链接覆写 */
+.aero-brand-link, 
+.aero-btn, 
+.footer-link,
+.back-home {
+  text-decoration: none !important;
+}
+
+body {
+  background-color: var(--aero-bg);
+  color: var(--aero-titanium);
+  font-family: var(--aero-font-sans);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* 顶部空天遥测轴 */
+.aero-telemetry-hud {
+  background: #060910;
+  border-bottom: 1px solid var(--aero-border);
+  padding: 8px 16px;
+  font-family: var(--aero-font-mono);
+  font-size: 0.8rem;
+  color: var(--aero-text-muted);
+}
+.aero-telemetry-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.hud-status-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #38bdf8;
+}
+.hud-beacon-pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 8px #22c55e;
+}
+.hud-metrics {
+  display: flex;
+  gap: 16px;
+}
+.hud-metrics span b {
+  color: var(--aero-thrust);
+}
+
+/* 气动掠翼导航栏 */
+.aero-cockpit-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #090d16;
+  border-bottom: 1px solid var(--aero-border);
+}
+.nav-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 14px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.aero-brand-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--aero-titanium);
+}
+.brand-text-block {
+  display: flex;
+  flex-direction: column;
+}
+.brand-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: var(--aero-titanium);
+}
+.brand-subtag {
+  font-size: 0.68rem;
+  font-family: var(--aero-font-mono);
+  color: var(--aero-thrust);
+  letter-spacing: 1px;
+}
+.nav-actions {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+/* 按钮通用系统 */
+.aero-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 22px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: transform 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.aero-btn-thrust {
+  background: linear-gradient(135deg, var(--aero-thrust), var(--aero-thrust-deep));
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 14px var(--aero-thrust-glow);
+}
+.aero-btn-thrust:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+}
+.aero-btn-radar {
+  background: var(--aero-surface-card);
+  color: #38bdf8;
+  border: 1px solid #0284c7;
+}
+.aero-btn-radar:hover {
+  background: #0f2d4a;
+  border-color: #38bdf8;
+  transform: translateY(-1px);
+}
+.aero-btn-outline {
+  background: transparent;
+  color: var(--aero-titanium);
+  border: 1px solid var(--aero-border-highlight);
+}
+.aero-btn-outline:hover {
+  border-color: var(--aero-thrust);
+  color: var(--aero-thrust);
+}
+
+/* 首屏控制台切分 (55/45 非对称掠翼首屏) */
+.aero-hero-stage {
+  padding: 64px 20px 80px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.hero-deck-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 48px;
+  align-items: center;
+}
+.mach-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  background: rgba(249, 115, 22, 0.12);
+  border: 1px solid var(--aero-thrust);
+  color: var(--aero-thrust);
+  font-family: var(--aero-font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  border-radius: 2px;
+  margin-bottom: 20px;
+}
+.hero-main-title {
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  font-weight: 900;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+  margin-bottom: 18px;
+  color: #ffffff;
+}
+.hero-main-title span {
+  color: var(--aero-thrust);
+}
+.hero-desc {
+  font-size: 1.05rem;
+  color: var(--aero-text-muted);
+  line-height: 1.7;
+  margin-bottom: 32px;
+  max-width: 580px;
+}
+.hero-cta-cluster {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 36px;
+}
+.hero-avionics-chips {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  border-top: 1px solid var(--aero-border);
+  padding-top: 24px;
+}
+.chip-unit {
+  font-family: var(--aero-font-mono);
+}
+.chip-val {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--aero-titanium);
+}
+.chip-val small {
+  font-size: 0.75rem;
+  color: var(--aero-thrust);
+}
+.chip-lbl {
+  font-size: 0.78rem;
+  color: var(--aero-text-dim);
+}
+
+/* 右侧气动风洞矢量视窗 */
+.hero-airfoil-window {
+  background: var(--aero-surface);
+  border: 1px solid var(--aero-border);
+  border-radius: 8px;
+  padding: 24px;
+  position: relative;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+}
+.window-topbar {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--aero-border);
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+  font-family: var(--aero-font-mono);
+  font-size: 0.75rem;
+  color: var(--aero-text-dim);
+}
+.window-topbar span.active-node {
+  color: #22c55e;
+}
+
+/* 分区通用排版 */
+.aero-section {
+  padding: 72px 20px;
+  border-top: 1px solid var(--aero-border);
+}
+.section-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.section-header-block {
+  margin-bottom: 44px;
+}
+.section-tagline {
+  font-family: var(--aero-font-mono);
+  font-size: 0.8rem;
+  color: var(--aero-thrust);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.section-heading {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+/* 核心特性卡片 (倒角钛金底盘) */
+.advantages-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.chassis-card {
+  background: var(--aero-surface);
+  border: 1px solid var(--aero-border);
+  clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 0 100%);
+  padding: 32px 26px;
+  transition: border-color 0.2s, transform 0.2s;
+  position: relative;
+}
+.chassis-card:hover {
+  border-color: var(--aero-thrust);
+  transform: translateY(-3px);
+}
+.card-icon-frame {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.card-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #ffffff;
+}
+.card-body {
+  font-size: 0.94rem;
+  color: var(--aero-text-muted);
+  line-height: 1.7;
+}
+
+/* 流媒体与AI四列矩阵 */
+.capabilities-matrix {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.capability-box {
+  background: var(--aero-surface-card);
+  border: 1px solid var(--aero-border);
+  padding: 24px;
+  border-radius: 4px;
+}
+.capability-box h3 {
+  font-size: 1.1rem;
+  margin: 14px 0 8px;
+  color: #ffffff;
+}
+.capability-box p {
+  font-size: 0.88rem;
+  color: var(--aero-text-muted);
+  line-height: 1.6;
+}
+
+/* 定价阶梯三栏 */
+.pricing-deck {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  align-items: stretch;
+}
+.price-chassis {
+  background: var(--aero-surface);
+  border: 1px solid var(--aero-border);
+  border-radius: 6px;
+  padding: 36px 28px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.price-chassis.featured {
+  border-color: var(--aero-thrust);
+  background: #141e30;
+  box-shadow: 0 8px 32px rgba(249, 115, 22, 0.15);
+}
+.popular-banner {
+  position: absolute;
+  top: -12px;
+  right: 24px;
+  background: var(--aero-thrust);
+  color: #ffffff;
+  font-family: var(--aero-font-mono);
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 2px;
+}
+.tier-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.tier-target {
+  font-size: 0.85rem;
+  color: var(--aero-text-muted);
+  margin-bottom: 24px;
+  min-height: 40px;
+}
+.price-figure {
+  font-family: var(--aero-font-mono);
+  font-size: 2.6rem;
+  font-weight: 900;
+  color: #ffffff;
+  margin-bottom: 24px;
+}
+.price-figure span {
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--aero-text-dim);
+}
+.tier-specs {
+  list-style: none;
+  margin-bottom: 32px;
+  flex-grow: 1;
+}
+.tier-specs li {
+  font-size: 0.92rem;
+  color: var(--aero-text-muted);
+  padding: 9px 0;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.tier-specs li::before {
+  content: "»";
+  color: var(--aero-thrust);
+  font-weight: 900;
+}
+.price-chassis .aero-btn {
+  width: 100%;
+}
+
+/* 客户口碑三栏 */
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.testimonial-card {
+  background: var(--aero-surface);
+  border: 1px solid var(--aero-border);
+  padding: 28px;
+  border-radius: 4px;
+}
+.client-quote {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--aero-titanium);
+  margin-bottom: 20px;
+  position: relative;
+}
+.client-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-top: 1px solid var(--aero-border);
+  padding-top: 14px;
+}
+.client-avatar-monogram {
+  width: 38px;
+  height: 38px;
+  border-radius: 4px;
+  background: #1e293b;
+  color: var(--aero-thrust);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-family: var(--aero-font-mono);
+}
+.client-role {
+  font-size: 0.8rem;
+  color: var(--aero-text-dim);
+}
+
+/* 常见问题手风琴 */
+.faq-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+.faq-item {
+  background: var(--aero-surface);
+  border: 1px solid var(--aero-border);
+  padding: 24px;
+  border-radius: 4px;
+}
+.faq-question {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.faq-question::before {
+  content: "Q.";
+  color: var(--aero-thrust);
+  font-family: var(--aero-font-mono);
+  font-weight: 800;
+}
+.faq-answer {
+  font-size: 0.92rem;
+  color: var(--aero-text-muted);
+  line-height: 1.7;
+  padding-left: 26px;
+}
+
+/* 极简规定页脚 (严格只展示四个页面标题) */
+.aero-site-footer {
+  background: #060910;
+  border-top: 1px solid var(--aero-border);
+  padding: 44px 20px;
+  text-align: center;
+}
+.footer-nav-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 28px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.footer-link {
+  color: var(--aero-text-muted);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: color 0.15s;
+}
+.footer-link:hover {
+  color: var(--aero-thrust);
+}
+.footer-copyright {
+  font-size: 0.8rem;
+  color: var(--aero-text-dim);
+  font-family: var(--aero-font-mono);
+}
+
+/* 响应式断点 (严格单栏自适应与手指轻触优化) */
+@media (max-width: 992px) {
+  .hero-deck-grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+  .advantages-grid,
+  .pricing-deck,
+  .testimonials-grid,
+  .faq-grid {
+    grid-template-columns: 1fr;
+  }
+  .capabilities-matrix {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .aero-telemetry-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .nav-wrapper {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .nav-actions {
+    width: 100%;
+    justify-content: stretch;
+  }
+  .nav-actions .aero-btn {
+    flex: 1;
+    min-height: 44px; /* 手指友好点击尺寸 */
+  }
+  .hero-main-title {
+    font-size: 1.85rem;
+  }
+  .hero-cta-cluster {
+    flex-direction: column;
+    width: 100%;
+  }
+  .hero-cta-cluster .aero-btn {
+    width: 100%;
+    min-height: 48px;
+  }
+  .capabilities-matrix {
+    grid-template-columns: 1fr;
+  }
+  .footer-nav-container {
+    flex-direction: column;
+    gap: 14px;
+  }
+}
+
+
+/* ==========================================================================
+   全设备自适应导航菜单 (CTA 按钮固定于右侧，移动端绝对可见、永不缺失、支持手势横滑)
+   ========================================================================== */
+.aero-cockpit-nav {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  background: #090d16;
+  border-bottom: 1px solid var(--aero-border);
+}
+.nav-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+.aero-brand-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none !important;
+  color: var(--aero-titanium) !important;
+  flex-shrink: 0;
+}
+.brand-text-block {
+  display: flex;
+  flex-direction: column;
+}
+.brand-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: var(--aero-titanium);
+}
+.brand-subtag {
+  font-size: 0.68rem;
+  font-family: var(--aero-font-mono);
+  color: var(--aero-thrust);
+  letter-spacing: 1px;
+}
+.aero-nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-left: auto;
+  margin-right: 16px;
+}
+.aero-nav-item,
+.aero-nav-item:link,
+.aero-nav-item:visited {
+  color: #cbd5e1 !important;
+  -webkit-text-fill-color: #cbd5e1 !important;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none !important;
+  transition: color 0.15s ease, background 0.15s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.aero-nav-item:hover,
+.aero-nav-item:focus {
+  color: var(--aero-thrust) !important;
+  -webkit-text-fill-color: var(--aero-thrust) !important;
+}
+.aero-nav-special,
+.aero-nav-special:link,
+.aero-nav-special:visited {
+  color: var(--aero-thrust) !important;
+  -webkit-text-fill-color: var(--aero-thrust) !important;
+  font-weight: 700;
+}
+.nav-actions {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* 按钮文字最高优先级可见性规范 */
+a.aero-btn,
+a.aero-btn:link,
+a.aero-btn:visited {
+  text-decoration: none !important;
+}
+a.aero-btn-thrust,
+a.aero-btn-thrust:link,
+a.aero-btn-thrust:visited {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: linear-gradient(135deg, var(--aero-thrust), var(--aero-thrust-deep)) !important;
+}
+a.aero-btn-thrust:hover,
+a.aero-btn-thrust:focus {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+a.aero-btn-outline,
+a.aero-btn-outline:link,
+a.aero-btn-outline:visited {
+  color: var(--aero-titanium) !important;
+  -webkit-text-fill-color: var(--aero-titanium) !important;
+}
+a.aero-btn-outline:hover,
+a.aero-btn-outline:focus {
+  color: var(--aero-thrust) !important;
+  -webkit-text-fill-color: var(--aero-thrust) !important;
+}
+
+/* 移动端媒体查询 (< 860px) 强效保障导航菜单绝对不消失，且 CTA 按钮位于右上侧 */
+@media (max-width: 860px) {
+  .nav-wrapper {
+    display: grid !important;
+    grid-template-columns: 1fr auto !important;
+    grid-template-rows: auto auto !important;
+    row-gap: 8px !important;
+    column-gap: 12px !important;
+    padding: 10px 14px !important;
+    align-items: center !important;
+  }
+  .aero-brand-link {
+    grid-column: 1 / 2 !important;
+    grid-row: 1 / 2 !important;
+    justify-self: start !important;
+  }
+  .nav-actions {
+    grid-column: 2 / 3 !important;
+    grid-row: 1 / 2 !important;
+    justify-self: end !important;
+    display: flex !important;
+    align-items: center !important;
+    margin: 0 !important;
+  }
+  .nav-actions .aero-btn {
+    padding: 7px 14px !important;
+    font-size: 0.82rem !important;
+    min-height: 36px !important;
+  }
+  .aero-nav-menu {
+    grid-column: 1 / 3 !important;
+    grid-row: 2 / 3 !important;
+    display: flex !important;
+    width: 100% !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    padding: 6px 0 2px !important;
+    margin: 0 !important;
+    gap: 10px !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+  }
+  .aero-nav-menu::-webkit-scrollbar {
+    display: none !important;
+  }
+  .aero-nav-item,
+  .aero-nav-item:link,
+  .aero-nav-item:visited {
+    flex-shrink: 0 !important;
+    display: inline-flex !important;
+    padding: 6px 12px !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-radius: 4px !important;
+    font-size: 0.82rem !important;
+  }
+}

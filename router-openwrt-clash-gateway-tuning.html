@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>全屋与工作室透明加速：OpenWrt软路由配合高端专线最佳实操方案 - 航电简报</title>
+  <meta name="description" content="手把手教你如何基于OpenWrt软路由搭建全屋透明代理网关，解析Fake-IP模式、DNS防污染机制与硬件NAT卸载调优方案。">
+  <link rel="canonical" href="https://wandayun.pics/router-openwrt-clash-gateway-tuning.html">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .article-wrap { max-width: 840px; margin: 44px auto 80px; padding: 0 20px; }
+    .article-header { border-bottom: 1px solid var(--aero-border); padding-bottom: 28px; margin-bottom: 36px; }
+    .article-tag { font-family: var(--aero-font-mono); font-size: 0.8rem; color: var(--aero-thrust); font-weight: 700; margin-bottom: 12px; }
+    .article-header h1 { font-size: clamp(1.8rem, 3.5vw, 2.4rem); color: #ffffff; line-height: 1.35; margin-bottom: 16px; font-weight: 900; }
+    .article-meta { display: flex; gap: 20px; font-family: var(--aero-font-mono); font-size: 0.8rem; color: var(--aero-text-dim); }
+    .article-content { font-size: 1.02rem; line-height: 1.85; color: #cbd5e1; }
+    .article-content h2 { font-size: 1.45rem; color: #ffffff; margin: 40px 0 16px; border-left: 3px solid var(--aero-thrust); padding-left: 14px; font-weight: 800; }
+    .article-content h3 { font-size: 1.2rem; color: #f1f5f9; margin: 28px 0 12px; font-weight: 700; }
+    .article-content p { margin-bottom: 20px; }
+    .article-content ul, .article-content ol { margin: 16px 0 24px 24px; }
+    .article-content li { margin-bottom: 10px; }
+    .tech-quote-box { background: var(--aero-surface); border: 1px solid var(--aero-border); border-left: 4px solid var(--aero-thrust); padding: 20px 24px; margin: 28px 0; border-radius: 0 4px 4px 0; }
+    .back-nav { display: inline-flex; align-items: center; gap: 6px; color: var(--aero-thrust); font-family: var(--aero-font-mono); font-size: 0.88rem; font-weight: 700; margin-bottom: 24px; text-decoration: none; }
+  </style>
+</head>
+<body>
+
+  <aside class="aero-telemetry-hud" aria-label="全网状态遥测">
+    <div class="aero-telemetry-inner">
+      <div class="hud-status-live">
+        <span class="hud-beacon-pulse"></span>
+        <span>万达云航电简报专栏 · 深度实测</span>
+      </div>
+      <div class="hud-metrics">
+        <span>网络架构 <b>IEPL 物理专线</b></span>
+        <span>评估等级 <b>A+ 企业级</b></span>
+      </div>
+    </div>
+  </aside>
+
+  <header class="aero-cockpit-nav">
+    <div class="nav-wrapper">
+      <a href="index.html" class="aero-brand-link">
+        <svg width="36" height="36" viewBox="0 0 48 48" fill="none">
+          <polygon points="24,4 44,40 24,32 4,40" fill="#1e293b" stroke="#f97316" stroke-width="2"/>
+          <line x1="24" y1="4" x2="24" y2="44" stroke="#ffffff" stroke-width="2"/>
+        </svg>
+        <div class="brand-text-block">
+          <span class="brand-title">万达云</span>
+          <span class="brand-subtag">WANDAYUN SUPERSONIC</span>
+        </div>
+      </a>
+      <nav class="aero-nav-menu" aria-label="全站导航">
+        <a href="index.html#features" class="aero-nav-item">极速体验</a>
+        <a href="index.html#capabilities" class="aero-nav-item">穿透机能</a>
+        <a href="index.html#pricing" class="aero-nav-item">专线配置</a>
+        <a href="index.html#reviews" class="aero-nav-item">机长口碑</a>
+        <a href="index.html#faq" class="aero-nav-item">飞行答疑</a>
+        <a href="flight-briefing.html" class="aero-nav-item aero-nav-special">航电简报</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="https://ww012.twilightaff.com/#/?code=A56DH1Af" target="_blank" rel="nofollow" class="aero-btn aero-btn-thrust">开通专线</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="article-wrap">
+    <a href="flight-briefing.html" class="back-nav">&larr; 返回航电简报目录</a>
+
+    <article>
+      <header class="article-header">
+        <div class="article-tag">// GATEWAY ARCHITECTURE // 软路由指南</div>
+        <h1>全屋与工作室透明加速：OpenWrt软路由配合高端专线最佳实操方案</h1>
+        <div class="article-meta">
+          <span>发布时间：2026-10-13</span>
+          <span>字数统计：约 1,110 字</span>
+          <span>技术分类：路由器网关与智能分流</span>
+        </div>
+      </header>
+
+      <div class="article-content">
+        <p>在当今智能家居、手机、平板、NAS 和客厅大屏电视高度普及的家庭与工作室环境中，如果每台设备都需要分别安装客户端并手动开启代理，不仅管理繁琐，而且像 Apple TV、PS5 游戏机、智能音箱等封闭生态设备往往根本无法直接运行代理软件，亟需集中网关解决方案。</p>
+        <h2>旁路网关（透明代理）的核心运作模型</h2>
+        <p>解决全屋多终端无感加速的最佳方案，就是在局域网内部署一台基于 OpenWrt 系统的软路由作为旁路网关。普通主路由器继续负责拨号和下发 DHCP 地址，而将局域网内设备的默认网关（Gateway）和 DNS 服务器指向这台 OpenWrt 设备。</p>
+        <h3>零配置终端的流量转发路径</h3>
+        <p>所有终端在不需要做任何客户端设置的前提下，国内日常流量直接走本地主路由直连，而所有跨洋国际请求则由旁路网关自动转发至高端物理专线通道中，实现真正润物细无声的透明加速体验。</p>
+        <h2>Fake-IP模式与DNS防污染深度实战</h2>
+        <p>透明网关的成败关键在于 DNS 解析逻辑。一旦发生污染或产生解析回环，不仅境外网站打不开，连国内普通的日常服务也会被拖慢。Fake-IP 模式为解决该难题提供了优秀范式。</p>
+        <div class="tech-quote-box">在传统的 Redir-Host 模式下，网关必须先通过远程干净 DNS 获取真实海外 IP，产生额外 RTT 耗时。而 Fake-IP 模式路由器会立即向客户端返回保留内网地址并在远端建立隧道连接。在专业评测发布的<a href="https://tizilab.net/" target="_blank">出海网络节点综合评测</a>中，Fake-IP 模式配合稳定专线被证实能显著压缩加载等待。</div>
+        <h3>规避DNS回环与防污染策略</h3>
+        <p>在 OpenWrt 中应将本地 DNS 查询与远程加密 DNS 分离，国内域名直接由运营商或本地公共 DNS 解析，出海域名经由专线无污染通道递归处理，杜绝解析冲突与污染风险。</p>
+        <h2>硬件NAT卸载与流量分流规则优化</h2>
+        <p>对于千兆宽带网络，运行代理对软路由 CPU 的软中断处理能力提出了较高要求。务必在 OpenWrt 的防火墙设置中勾选软件流量分载（Software flow offloading），如果硬件网卡支持，还应同步开启硬件流量分载。</p>
+        <h3>分流规则精细化配置实践</h3>
+        <p>在分流规则配置上，推荐遵循“大陆白名单规则（GEOIP, CN, DIRECT）”为底色，对 Netflix、OpenAI、GitHub 等高频出海域名建立独立出站规则，绑定至延迟最低的 IEPL 专线，从而保证全家老少多设备并发时各行其道、互不挤占。</p>
+        <h3>TProxy与TUN虚拟网卡模式选型</h3>
+        <p>在透明网关的转发模式抉择上，推荐针对 UDP 流量优先选用 TProxy（透明代理）内核模块，针对 TCP 流量则配合 TUN 虚拟网卡接口。这种组合不仅能够完整保留客户端源 IP 报文头，便于局域网审计，还能显著降低内核态与用户态之间上下文切换的性能损耗，即使面对峰值并发也能从容应对。</p>
+        <h2>结语：打造专业无感的出海网络基础设施</h2>
+        <p>软路由技术与高水准物理专线的结合，不仅彻底解除了单机繁琐配置的束缚，更为多设备并发提供了极具韧性的中枢底座。只要遵循科学严谨的配置策略，每个人都能亲手打造出一个畅快自由的跨洋数字工作空间。</p>
+      </div>
+    </article>
+  </main>
+
+  <footer class="aero-site-footer">
+    <div class="section-container">
+      <nav class="footer-nav-container">
+        <a href="sitemap.html" class="footer-link">网站地图</a>
+        <a href="about.html" class="footer-link">关于我们</a>
+        <a href="terms.html" class="footer-link">服务条款</a>
+        <a href="privacy.html" class="footer-link">隐私政策</a>
+      </nav>
+      <div class="footer-copyright">
+        &copy; 2026 万达云 WANDAYUN. All Rights Reserved. 航空级超音速物理专线互联中枢.
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

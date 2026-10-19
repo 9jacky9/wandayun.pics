@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>隐私政策 - 万达云</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .subpage-container { max-width: 860px; margin: 40px auto 80px; padding: 0 20px; }
+    .subpage-header { border-bottom: 1px solid var(--aero-border); padding-bottom: 24px; margin-bottom: 36px; }
+    .subpage-header h1 { font-size: 2.2rem; color: #ffffff; margin-bottom: 12px; }
+    .subpage-header p { color: var(--aero-text-muted); font-size: 1.05rem; }
+    .content-section { margin-bottom: 36px; background: var(--aero-surface); border: 1px solid var(--aero-border); border-radius: 6px; padding: 32px; }
+    .content-section h2 { font-size: 1.35rem; color: var(--aero-thrust); margin-bottom: 16px; border-left: 3px solid var(--aero-thrust); padding-left: 12px; }
+    .content-section p { color: var(--aero-text-muted); line-height: 1.8; margin-bottom: 14px; font-size: 0.95rem; }
+    .content-section ul { list-style: square; padding-left: 20px; color: var(--aero-text-muted); line-height: 1.8; font-size: 0.95rem; }
+    .highlight-box { background: rgba(249, 115, 22, 0.08); border: 1px solid var(--aero-thrust); border-radius: 6px; padding: 18px; margin: 16px 0; color: #ffffff; font-weight: 500; }
+    .back-home { display: inline-flex; align-items: center; gap: 6px; color: var(--aero-thrust); text-decoration: none; margin-bottom: 24px; font-weight: 600; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+
+  <header class="aero-cockpit-nav">
+    <div class="nav-wrapper">
+      <a href="index.html" class="aero-brand-link">
+        <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+          <polygon points="24,4 44,40 24,32 4,40" fill="#1e293b" stroke="#f97316" stroke-width="2"/>
+          <line x1="24" y1="4" x2="24" y2="44" stroke="#ffffff" stroke-width="2"/>
+        </svg>
+        <span class="brand-title">万达云</span>
+      </a>
+      <nav class="aero-nav-menu" aria-label="全站导航">
+        <a href="index.html#features" class="aero-nav-item">极速体验</a>
+        <a href="index.html#capabilities" class="aero-nav-item">穿透机能</a>
+        <a href="index.html#pricing" class="aero-nav-item">专线配置</a>
+        <a href="index.html#reviews" class="aero-nav-item">机长口碑</a>
+        <a href="index.html#faq" class="aero-nav-item">飞行答疑</a>
+        <a href="flight-briefing.html" class="aero-nav-item aero-nav-special">航电简报</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="https://ww012.twilightaff.com/#/?code=A56DH1Af" target="_blank" rel="nofollow" class="aero-btn aero-btn-thrust">开通专线</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="subpage-container">
+    <a href="index.html" class="back-home">&larr; 返回首页</a>
+
+    <div class="subpage-header">
+      <h1>隐私政策</h1>
+      <p>保护用户通信隐私与数据安全是万达云的核心立足之本。</p>
+    </div>
+
+    <!-- 零日志承诺 (重点明确声明) -->
+    <section class="content-section">
+      <h2>1. 严苛的“零活动日志”承诺 (No-Logs Policy)</h2>
+      <div class="highlight-box">
+        万达云在此郑重声明并承诺：本平台所有专线服务器均配置为 RAM 纯内存无盘运行机制，严禁且技术上杜绝记录任何用户的具体网络活动数据。
+      </div>
+      <p>具体而言，我们<strong>绝不记录、绝不存储、绝不追踪、绝不分发</strong>以下任何个人行为信息：</p>
+      <ul>
+        <li>您所浏览的任何目标网站域名、网页 URL 与 API 请求路径；</li>
+        <li>您在通信过程中上传或下载的任何数据报文内容与明细；</li>
+        <li>您的源 IP 地址与每次连接的目标 IP 地址映射记录；</li>
+        <li>DNS 查询历史解析记录（全局采用自建内存加密 DNS 解析，查询完毕即刻销毁）。</li>
+      </ul>
+    </section>
+
+    <!-- 账户与服务基本信息 -->
+    <section class="content-section">
+      <h2>2. 所收集之必要基础账户信息</h2>
+      <p>为了保障账号体系的正常运维与订阅续期，我们仅收集最基础且必要的账户信息：</p>
+      <ul>
+        <li>注册时提交的电子邮箱地址（作为唯一身份认证标识）；</li>
+        <li>密码采用行业高标准 Argon2id 单向加盐哈希算法加密，即使内部系统管理员亦无法逆向解密；</li>
+        <li>仅用于流量统计与计费的周期总吞吐量数值（不含任何访问行为上下文）。</li>
+      </ul>
+    </section>
+
+    <!-- 安全防护与加密体系 -->
+    <section class="content-section">
+      <h2>3. 传输层加密与安全保障</h2>
+      <p>万达云在物理专线中全面启用 AEAD（ChaCha20-Poly1305 / AES-256-GCM）前向安全加密传输标准。所有流经光纤信道的数据均被深度加密，有效杜绝任何网络监听、流量劫持或中间人攻击风险。</p>
+    </section>
+
+    <!-- 隐私政策更新 -->
+    <section class="content-section">
+      <h2>4. 政策更新与咨询通道</h2>
+      <p>若隐私政策发生任何重要修订，我们将在官网显著位置发布公告。如有关于隐私安全或数据处理之任何疑问，欢迎随时通过工单系统联系万达云技术安全合规团队。</p>
+    </section>
+  </main>
+
+  <footer class="aero-site-footer">
+    <div class="section-container">
+      <nav class="footer-nav-container">
+        <a href="sitemap.html" class="footer-link">网站地图</a>
+        <a href="about.html" class="footer-link">关于我们</a>
+        <a href="terms.html" class="footer-link">服务条款</a>
+        <a href="privacy.html" class="footer-link">隐私政策</a>
+      </nav>
+      <div class="footer-copyright">&copy; 2026 万达云 WANDAYUN. All Rights Reserved.</div>
+    </div>
+  </footer>
+
+</body>
+</html>
